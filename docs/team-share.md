@@ -25,7 +25,7 @@ flowchart TB
   D["Embeddings<br/>GoogleGenerativeAIEmbeddings\nmodels/embedding-001"]
   E["Chroma Vector Store\ndata/chroma"]
   F["Retriever<br/>Chroma.as_retriever"]
-  G["Gemini Chat<br/>ChatGoogleGenerativeAI\nmodels/..."]
+  G["Gemini Chat<br/>ChatGoogleGenerativeAI<br/>models/..."]
   H["Answer Output"]
 
   A --> B --> C --> D --> E
