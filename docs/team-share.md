@@ -19,7 +19,7 @@
 ## 2. システム構成
 ```mermaid
 flowchart TB
-  A["Notion API"\n"(pages.retrieve / blocks.children.list)"]
+  A["Notion API<br/>(pages.retrieve / blocks.children.list)"]
   B["Python CLI\nrag.py ingest"]
   C["Text Splitter\nRecursiveCharacterTextSplitter"]
   D["Embeddings\nGoogleGenerativeAIEmbeddings\nmodels/embedding-001"]
