@@ -20,12 +20,12 @@
 ```mermaid
 flowchart TB
   A["Notion API<br/>(pages.retrieve / blocks.children.list)"]
-  B["Python CLI\nrag.py ingest"]
-  C["Text Splitter\nRecursiveCharacterTextSplitter"]
-  D["Embeddings\nGoogleGenerativeAIEmbeddings\nmodels/embedding-001"]
+  B["Python CLI<br/>rag.py ingest"]
+  C["Text Splitter<br/>RecursiveCharacterTextSplitter"]
+  D["Embeddings<br/>GoogleGenerativeAIEmbeddings\nmodels/embedding-001"]
   E["Chroma Vector Store\ndata/chroma"]
-  F["Retriever\nChroma.as_retriever"]
-  G["Gemini Chat\nChatGoogleGenerativeAI\nmodels/..."]
+  F["Retriever<br/>Chroma.as_retriever"]
+  G["Gemini Chat<br/>ChatGoogleGenerativeAI\nmodels/..."]
   H["Answer Output"]
 
   A --> B --> C --> D --> E
