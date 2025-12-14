@@ -19,18 +19,18 @@
 ## 2. システム構成
 ```mermaid
 flowchart TB
-    A[Notion API<br>(pages.retrieve / blocks.children.list)]
-    B[Python CLI<br>rag.py ingest]
-    C[Text Splitter<br>RecursiveCharacterTextSplitter]
-    D[Embeddings<br>GoogleGenerativeAIEmbeddings<br>models/embedding-001]
-    E[Chroma Vector Store<br>data/chroma]
-    F[Retriever<br>Chroma.as_retriever]
-    G[Gemini Chat<br>ChatGoogleGenerativeAI<br>models/...]
-    H[Answer Output]
+  A["Notion API\n(pages.retrieve / blocks.children.list)"]
+  B["Python CLI\nrag.py ingest"]
+  C["Text Splitter\nRecursiveCharacterTextSplitter"]
+  D["Embeddings\nGoogleGenerativeAIEmbeddings\nmodels/embedding-001"]
+  E["Chroma Vector Store\ndata/chroma"]
+  F["Retriever\nChroma.as_retriever"]
+  G["Gemini Chat\nChatGoogleGenerativeAI\nmodels/..."]
+  H["Answer Output"]
 
-    A --> B --> C --> D --> E
-    B -.->|"ask"| F
-    F --> G --> H
+  A --> B --> C --> D --> E
+  B -.->|ask| F
+  F --> G --> H
 ```
 
 - **主要ライブラリ**
