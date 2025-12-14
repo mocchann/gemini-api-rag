@@ -71,6 +71,26 @@ sequenceDiagram
     CLI-->>User: Answer + Sources
 ```
 
+### 役者別の解説
+1. **Notion（情報源）**  
+   - 社内ナレッジやタスクが書かれたページを対象。`rag.py ingest` を実行すると Notion API (`pages.retrieve`, `blocks.children.list`) から本文とブロックを取得する。  
+   - 事前にインテグレーションをページに共有して API アクセス権を付与しておく。
+2. **LangChain Text Splitter（チャンク化）**  
+   - `RecursiveCharacterTextSplitter` で 1,000 文字程度のチャンクに分割。小さく分けることで検索・埋め込みが扱いやすくなる。
+3. **Gemini Embeddings**  
+   - `GoogleGenerativeAIEmbeddings(model="models/embedding-001")` で各チャンクをベクトル化し、意味空間にマッピングする。  
+   - Embedding API はクォータ制限あり。AI Studio 側で請求設定とプロジェクトの整合が必要。
+4. **Chroma Vector Store（格納＋検索）**  
+   - ベクトルをローカル `data/chroma` に永続化し、Retrieval の際は `as_retriever(k=4)` で類似チャンクを取り出す。  
+   - ページを更新したら `ingest --reset` で再構築。
+5. **Gemini Chat（回答生成）**  
+   - `ChatGoogleGenerativeAI` にリトリーブしたチャンクと質問をプロンプトとして渡し、Notion 情報に基づいて回答を生成。  
+   - モデル ID は `models/...` 形式で指定（デフォルト `models/gemini-1.5-flash-latest`、`.env` で上書き可）。
+6. **CLI (`rag.py`)**  
+   - `ingest`: Notion → チャンク → Embedding → Chroma 保存まで自動実行。  
+   - `ask`: 質問 → ベクトル検索 → Gemini 回答 → 参照元表示。  
+   - 2 つのコマンドで RAG のワークフローを完結できる。
+
 ## 4. Gemini API の特徴 & 連携方法
 - **モデル ID の指定方法**  
   - `google-genai` SDK は `models/<model-name>` 形式で指定。デフォルトは `models/gemini-1.5-flash-latest`。  
