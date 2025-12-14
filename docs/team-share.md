@@ -6,7 +6,7 @@
 
 ## 1. 業務適用イメージ
 - **情報源が Notion ページ単位で整理されている場合に即投入可能**  
-  例: 「営業 QA 集」「プロジェクト要件まとめ」「社内ナレッジページ」など。ページ内容をチャンク分割 → Embedding → 検索 → 回答生成までを `rag.py ingest` / `rag.py ask` の 2 コマンドで実行。
+例: 「営業 QA 集」「プロジェクト要件まとめ」「社内ナレッジページ」など。ページ内容をチャンク分割 → Embedding → 検索 → 回答生成までを `rag.[...]`
 - **想定ユースケース**
   - 少人数チームでの FAQ ボット、問い合わせ対応の一次回答
   - プロジェクト固有の要件書から最新情報を引き出すリサーチ補助
@@ -19,13 +19,13 @@
 ## 2. システム構成
 ```mermaid
 flowchart TB
-    A[Notion API<br/>(pages.retrieve / blocks.children.list)]
-    B[Python CLI<br/>rag.py ingest]
-    C[Text Splitter<br/>RecursiveCharacterTextSplitter]
-    D[Embeddings<br/>GoogleGenerativeAIEmbeddings<br/>models/embedding-001]
-    E[Chroma Vector Store<br/>data/chroma]
-    F[Retriever<br/>Chroma.as_retriever]
-    G[Gemini Chat<br/>ChatGoogleGenerativeAI<br/>models/...]
+    A[Notion API<br>(pages.retrieve / blocks.children.list)]
+    B[Python CLI<br>rag.py ingest]
+    C[Text Splitter<br>RecursiveCharacterTextSplitter]
+    D[Embeddings<br>GoogleGenerativeAIEmbeddings<br>models/embedding-001]
+    E[Chroma Vector Store<br>data/chroma]
+    F[Retriever<br>Chroma.as_retriever]
+    G[Gemini Chat<br>ChatGoogleGenerativeAI<br>models/...]
     H[Answer Output]
 
     A --> B --> C --> D --> E
@@ -75,19 +75,19 @@ sequenceDiagram
 - **モデル ID の指定方法**  
   - `google-genai` SDK は `models/<model-name>` 形式で指定。デフォルトは `models/gemini-1.5-flash-latest`。  
   - `.env` で bare 名（例: `gemini-1.5-pro`) を記入しても `rag.py` 側で `models/` を付与するため互換性あり。
-- **Embedding**  
+- **Embedding**
   - `GoogleGenerativeAIEmbeddings(model="models/embedding-001")` を使用。初回インジェストで全チャンクをベクトル化し、Chroma へ永続化。  
-  - Embedding のリクエストはクォータ制限が厳しいため、AI Studio で請求設定を済ませ、プロジェクトと API キーが一致していることを確認する必要あり。
-- **Chat**  
-  - `ChatGoogleGenerativeAI` を使用。Retriever から得たコンテキストをプロンプトに埋め込み、「Notion 情報のみで回答」「不明なら不明と答える」などのガードを設定。  
+  - Embedding のリクエストはクォータ制限が厳しいため、AI Studio で請求設定を済ませ、プロジェクトと API キーが一致していることを確認する必要あり[...] 
+- **Chat**
+  - `ChatGoogleGenerativeAI` を使用。Retriever から得たコンテキストをプロンプトに埋め込み、「Notion 情報のみで回答」「不明なら不明と答える」などのガ�[...] 
   - モデル差し替えは `GEMINI_CHAT_MODEL` 環境変数で対応。
 
 ## 4. Notion 連携のポイント
-- **ページ ID の取得**  
+- **ページ ID の取得**
   - ブラウザ URL の末尾にある 32 桁 (ハイフン有り/無し) を UUID 形式に整え、`.env` の `NOTION_PAGE_ID` に設定。
-- **権限付与**  
-  - Notion で対象ページを開き、「共有 / コネクト」から今回作成したインテグレーションを追加。親ページ/テンプレートにも共有が必要な場合あり。
-- **取り込み仕様**  
+- **権限付与**
+  - Notion で対象ページを開き、「共有 / コネクト」から今回作成したインテグレーションを追加。親ページ/テンプレートにも共有が必要な場合あり��[...] 
+- **取り込み仕様**
   - `blocks.children.list` で各ブロックの rich_text を抽出。`paragraph`, `heading_x`, `bulleted_list_item`, `to_do` など主要ブロックのみ対象。  
   - ページタイトル＋本文を 1 つの `Document` にまとめ、LangChain の Text Splitter でチャンク化。
 
